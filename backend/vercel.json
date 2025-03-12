@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
     "version": 2,
     "builds": [
       {
@@ -15,20 +14,3 @@
       }
     ]
   }
-=======
-  "version": 2,
-  "builds": [
-    {
-      "src": "manage.py",
-      "use": "@vercel/python",
-      "config": { "runtime": "python3.9" }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "manage.py"
-    }
-  ]
-}
->>>>>>> 7befaba893e54c063e5a5a503e7c1d8422c9b498
