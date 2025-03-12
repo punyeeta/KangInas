@@ -123,7 +123,7 @@ const UserProfilePage = () => {
   
   // If it's a relative URL (doesn't start with http)
   if (!user.profile_picture.startsWith('http')) {
-    return `${import.meta.env.VITE_BACKEND_URL}${user.profile_picture}`;
+    return `${import.meta.env.VITE_API_URL}${user.profile_picture}`;
   }
   
   return user.profile_picture;

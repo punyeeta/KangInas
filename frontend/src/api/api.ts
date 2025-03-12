@@ -2,8 +2,8 @@
 import axios from "axios";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "./constants";
 
-// Read backend URL from environment variable 
-const API_URL = import.meta.env.VITE_BACKEND_URL;
+// Read backend URL from environment variable
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Create main API instance with base URL
 const api = axios.create({

@@ -1,7 +1,5 @@
 import api from './api'; // Import the configured axios instance
 
-const BASE_URL = import.meta.env.VITE_BACKEND_URL;
-
 export interface CartItem {
   id: number;
   product: number;
@@ -13,7 +11,7 @@ export interface CartItem {
 
 export const getCartItems = async (): Promise<CartItem[]> => {
   try {
-    const response = await api.get(`${BASE_URL}/cart/`);
+    const response = await api.get('/cart/');
     return response.data;
   } catch (error) {
     console.error('Error fetching cart items:', error);
@@ -23,7 +21,7 @@ export const getCartItems = async (): Promise<CartItem[]> => {
 
 export const addToCart = async (productId: number, quantity: number = 1): Promise<CartItem> => {
   try {
-    const response = await api.post(`${BASE_URL}/cart/add/`, {
+    const response = await api.post('/cart/add/', {
       product_id: productId,
       quantity
     });
@@ -36,7 +34,7 @@ export const addToCart = async (productId: number, quantity: number = 1): Promis
 
 export const removeFromCart = async (productId: number): Promise<void> => {
   try {
-    await api.delete(`${BASE_URL}/cart/remove/${productId}/`);
+    await api.delete(`/cart/remove/${productId}/`);
   } catch (error) {
     console.error('Error removing item from cart:', error);
     throw error;
@@ -44,8 +42,11 @@ export const removeFromCart = async (productId: number): Promise<void> => {
 };
 
 export const updateCartItemQuantity = async (productId: number, quantity: number): Promise<CartItem> => {
-  // First remove the item
-  await removeFromCart(productId);
-  // Then add it back with the new quantity
-  return await addToCart(productId, quantity);
+  try {
+    await removeFromCart(productId);
+    return await addToCart(productId, quantity);
+  } catch (error) {
+    console.error('Error updating cart item quantity:', error);
+    throw error;
+  }
 };
