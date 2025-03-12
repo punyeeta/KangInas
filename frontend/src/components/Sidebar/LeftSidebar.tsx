@@ -21,7 +21,7 @@ const LeftSidebar: React.FC = () => {
 
     const handleLogout = async () => {
         await logout(); // Wait for logout to complete
-        navigate('/login'); // Redirect to login page after logout
+        navigate('/'); // Redirect to login page after logout
     };
 
     return (
