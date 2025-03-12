@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
 import LandingPage from './pages/Landingpage/LandingPage';
 import Home from './pages/Home';
-import Login from './pages/Login';
+import Login from './pages/login';
 import Register from './pages/Register';
 import PrivateRoute from './components/PrivateRoute';
 import useAuthStore from './store/AuthStore';
