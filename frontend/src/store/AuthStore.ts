@@ -220,11 +220,8 @@ const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await api.put('/profile/update/', data);
-      // Log the response to debug
-      console.log('Profile update response:', response.data);
       set({ user: response.data, isLoading: false });
     } catch (error: any) {
-      console.error('Profile update error:', error);
       let errorMessage = 'Failed to update profile';
       if (error.response?.data) {
         if (typeof error.response.data === 'object') {
@@ -248,48 +245,47 @@ const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const formData = new FormData();
       formData.append('profile_picture', file);
-    
+  
       console.log('Uploading profile picture...');
       
       const response = await api.put('/profile/picture/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-    
+  
       console.log('Profile picture upload complete response:', response);
+      console.log('Response data:', response.data);
       
-      // Extract the URL directly from the response
-      const profilePictureUrl = response.data.profile_picture;
-      
-      if (profilePictureUrl) {
-        console.log('Profile picture URL:', profilePictureUrl);
+      if (response.data) {
+        // Try to extract the profile picture URL, handling different response formats
+        const profilePicture = response.data.profile_picture || response.data.url || response.data;
+        console.log('Extracted profile picture URL:', profilePicture);
         
         // Update the user object in the store
         set((state) => ({
-          user: state.user ? { ...state.user, profile_picture: profilePictureUrl } : null,
+          user: state.user ? { ...state.user, profile_picture: profilePicture } : null,
           isLoading: false,
         }));
         
-        return profilePictureUrl;
+        // Return the URL for external use if needed
+        return profilePicture;
       } else {
-        console.error('No profile picture URL in response');
         set({ error: "Failed to get profile picture URL", isLoading: false });
         return undefined;
       }
-    } catch (error: any) {
+    } catch (error: any) { // Add type annotation here
       console.error('Error updating profile picture:', error);
-      
+      // Safely access error.response if it exists
       if (error.response) {
-        console.error('Error status:', error.response.status);
-        console.error('Error data:', error.response.data);
+        console.error('Error response:', error.response.data);
       }
-      
+      // Safely create an error message
       const errorMessage = error.response?.data?.error || 
                            (error instanceof Error ? error.message : 'Failed to update profile picture');
       set({ error: errorMessage, isLoading: false });
       return undefined;
     }
   },
-  
+
   updateDietaryPreferences: async (data) => {
     set({ isLoading: true, error: null });
     try {

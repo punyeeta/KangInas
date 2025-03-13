@@ -1,50 +1,88 @@
 import React from 'react';
 import { CategoryOption } from '../../api/productApi';
+import image1 from '../../assets/categories/category1.png';
+import image2 from '../../assets/categories/category2.png';
+import image3 from '../../assets/categories/category3.png';     
+import image4 from '../../assets/categories/category4.png';
+import image5 from '../../assets/categories/category5.png';
 
 interface CategorySelectorProps {
-    categories: CategoryOption[];
-    selectedCategory: string;
-    onCategorySelect: (category: string) => void;
-    isLoading: boolean;
-    isError: boolean;
-  }
-  
-  export const CategorySelector: React.FC<CategorySelectorProps> = ({ 
-    categories, 
-    selectedCategory, 
-    onCategorySelect, 
-    isLoading, 
-    isError 
-  }) => {
-    if (isLoading) {
-      return <div className="mb-6 flex gap-2">
-        {[1, 2, 3, 4].map(i => (
-          <div key={i} className="h-10 w-24 rounded-full bg-gray-200 animate-pulse"></div>
-        ))}
-      </div>;
-    }
-  
-    if (isError) {
-      return <div className="mb-6 text-red-500">Failed to load categories</div>;
-    }
-  
+  categories: CategoryOption[];
+  selectedCategory: string;
+  onCategorySelect: (category: string) => void;
+  isLoading: boolean;
+  isError: boolean;
+}
+
+// Category-to-image and style mapping
+const categoryStyles: Record<string, { image: string; bgColor: string; textColor: string }> = {
+  ALL: { image: image1, bgColor: 'bg-white', textColor: 'text-black' },
+  AGAHAN: { image: image2, bgColor: 'bg-white', textColor: 'text-black' },
+  TANGHALIAN: { image: image3, bgColor: 'bg-white', textColor: 'text-black' },
+  HAPUNAN: { image: image4, bgColor: 'bg-white', textColor: 'text-black' },
+  MERIENDA: { image: image5, bgColor: 'bg-white', textColor: 'text-black' }
+};
+
+export const CategorySelector: React.FC<CategorySelectorProps> = ({
+  categories,
+  selectedCategory,
+  onCategorySelect,
+  isLoading,
+  isError
+}) => {
+  if (isLoading) {
     return (
-      <div className="mb-6">
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <button
-              key={category.value}
-              onClick={() => onCategorySelect(category.value)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors 
-                ${selectedCategory === category.value
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-                }`}
-            >
-              {category.label}
-            </button>
-          ))}
-        </div>
+      <div className="mb-6 flex justify-center gap-2">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="h-40 w-40 rounded-lg bg-gray-200 animate-pulse"></div>
+        ))}
       </div>
     );
-  };
+  }
+
+  if (isError) {
+    return <div className="mb-6 text-red-500">Failed to load categories</div>;
+  }
+
+  return (
+    <div className="mb-6">
+      <div className="flex justify-center gap-3 overflow-x-auto py-2">
+        {categories.map((category) => {
+          const style = categoryStyles[category.value.toUpperCase()] || {
+            image: '/images/default.jpg',
+            bgColor: 'bg-white',
+            textColor: 'text-black'
+          };
+
+          const subtitle = 
+            category.value.toLowerCase() === 'all' ? '18 items' : 
+            category.value.toLowerCase() === 'agahan' ? '5 items' :
+            category.value.toLowerCase() === 'tanghalian' ? '4 items' :
+            category.value.toLowerCase() === 'hapunan' ? '4 items' :
+            category.value.toLowerCase() === 'merienda' ? '5 items' : '';
+
+          return (
+            <button
+            key={category.value}
+            onClick={() => onCategorySelect(category.value)}
+            className={`flex flex-col items-start p-4 w-32 h-32 rounded-lg shadow-lg border border-gray-200 transition-all 
+              ${style.bgColor} ${style.textColor}
+              ${selectedCategory === category.value ? 'ring-1 ring-black' : ''}`}
+          >
+            <img
+              src={style.image}
+              alt={category.label}
+              className="w-13 h-13 object-contain mb-2"
+            />
+            <div className="w-full text-left">
+              <div className="text-sm font-medium">{category.label}</div>
+              <div className="text-xs text-gray-500">{subtitle}</div>
+            </div>
+          </button>
+          
+          );
+        })}
+      </div>
+    </div>
+  );
+};

@@ -88,7 +88,7 @@ const Home: React.FC = () => {
                                 isLoading={categoriesLoading}
                                 isError={categoriesError}
                             />
-                            <div className="border-b-2 border-gray-400 my-6"></div>
+                            <div className="border-b-1 border-gray-400 my-6 w-[92%] mx-auto"></div>
                             
                             {searchQuery.trim() !== '' && (
                                 <div className="mb-4 text-lg">
