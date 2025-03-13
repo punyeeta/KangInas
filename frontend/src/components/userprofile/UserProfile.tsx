@@ -119,15 +119,24 @@ const UserProfilePage = () => {
 
   // Get the profile picture URL with cache-busting only if needed
   const getProfilePicture = () => {
-  if (!user?.profile_picture) return null;
-  
-  // If it's a relative URL (doesn't start with http)
-  if (!user.profile_picture.startsWith('http')) {
-    return `${import.meta.env.VITE_API_URL}${user.profile_picture}`;
-  }
-  
-  return user.profile_picture;
-};
+    if (!user?.profile_picture) return null;
+    
+    // If it's a relative URL (doesn't start with http)
+    if (!user.profile_picture.startsWith('http')) {
+      // Ensure we have a slash between the base URL and the path
+      const baseUrl = import.meta.env.VITE_API_URL.endsWith('/') 
+        ? import.meta.env.VITE_API_URL.slice(0, -1) 
+        : import.meta.env.VITE_API_URL;
+      
+      const imagePath = user.profile_picture.startsWith('/') 
+        ? user.profile_picture 
+        : `/${user.profile_picture}`;
+        
+      return `${baseUrl}${imagePath}`;
+    }
+    
+    return user.profile_picture;
+  };
 
   const profilePictureUrl = getProfilePicture();
 
@@ -143,21 +152,26 @@ const UserProfilePage = () => {
           </button>
           <div className="p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
             <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center text-3xl text-gray-500 overflow-hidden">
-              {profilePictureUrl ? (
-                <img 
-                  src={profilePictureUrl} 
-                  alt={user?.username?.charAt(0).toUpperCase() || ''} 
-                  className="h-full w-full object-cover rounded-full" 
-                  onError={(e) => {
-                    console.error("Profile image failed to load:", e);
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              ) : (
-                user?.full_name ? 
-                  user.full_name.charAt(0).toUpperCase() : 
-                  (user?.username?.charAt(0).toUpperCase() || '?')
-              )}
+            {profilePictureUrl ? (
+  <>
+    <img 
+      src={profilePictureUrl} 
+      alt={user?.username?.charAt(0).toUpperCase() || ''} 
+      className="h-full w-full object-cover rounded-full" 
+      onLoad={() => console.log('Image loaded successfully:', profilePictureUrl)}
+      onError={(e) => {
+        console.error("Profile image failed to load:", profilePictureUrl);
+        e.currentTarget.style.display = 'none';
+      }}
+    />
+    {/* Fallback for debugging */}
+    <div className="hidden">{profilePictureUrl}</div>
+  </>
+) : (
+  user?.full_name ? 
+    user.full_name.charAt(0).toUpperCase() : 
+    (user?.username?.charAt(0).toUpperCase() || '?')
+)}
             </div>
             <div className="text-center md:text-left w-full">
               <h2 className="text-2xl font-bold text-indigo-900">{user?.full_name || user?.username || 'No name set'}</h2>
