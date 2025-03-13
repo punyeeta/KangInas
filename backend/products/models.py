@@ -3,11 +3,11 @@ from django.conf import settings
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
-        ('ALL', 'All'),
-        ('AGAHAN', 'Agahan'),
-        ('TANGHALIAN', 'Tanghalian'),
-        ('HAPUNAN', 'Hapunan'),
-        ('MERIENDA', 'Merienda'),
+        ('ALL', 'all'),
+        ('AGAHAN', 'agahan'),
+        ('TANGHALIAN', 'tanghalian'),
+        ('HAPUNAN', 'hapunan'),
+        ('MERIENDA', 'merienda'),
     ]
     
     name = models.CharField(max_length=100)

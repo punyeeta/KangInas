@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from cloudinary.models import CloudinaryField
 
 class User(AbstractUser):
     # In AbstractUser, username already exists
@@ -9,7 +10,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=100, unique=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+    profile_picture = CloudinaryField('profile_picture', null=True, blank=True)
     
     # Dietary preferences
     is_vegetarian = models.BooleanField(default=False)
