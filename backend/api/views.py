@@ -85,30 +85,32 @@ class ProfileUpdateView(APIView):
 class ProfilePictureUpdateView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
-    
+
     def put(self, request):
         try:
             user = request.user
-            
+
+            # Check if the file is provided
             if 'profile_picture' not in request.FILES:
                 return Response({"error": "No image provided"}, status=status.HTTP_400_BAD_REQUEST)
-            
+
             # Save the profile picture
             user.profile_picture = request.FILES['profile_picture']
             user.save()
-            
-            # Return the URL from Cloudinary
+
+            # Return the URL of the uploaded image
             return Response({
                 "message": "Profile picture updated successfully",
-                "profile_picture": user.profile_picture.url
-            })
+                "profile_picture": user.profile_picture.url  # Ensure this returns the full URL
+            }, status=status.HTTP_200_OK)
+
         except Exception as e:
             logger.error(f"Error updating profile picture: {str(e)}")
             return Response({
                 "error": f"Error updating profile picture: {str(e)}"
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        
+
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
