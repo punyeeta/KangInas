@@ -121,21 +121,13 @@ const UserProfilePage = () => {
   const getProfilePicture = () => {
     if (!user?.profile_picture) return null;
     
-    // If it's a relative URL (doesn't start with http)
-    if (!user.profile_picture.startsWith('http')) {
-      // Ensure we have a slash between the base URL and the path
-      const baseUrl = import.meta.env.VITE_API_URL.endsWith('/') 
-        ? import.meta.env.VITE_API_URL.slice(0, -1) 
-        : import.meta.env.VITE_API_URL;
-      
-      const imagePath = user.profile_picture.startsWith('/') 
-        ? user.profile_picture 
-        : `/${user.profile_picture}`;
-        
-      return `${baseUrl}${imagePath}`;
+    // Check if the URL already includes the domain
+    if (user.profile_picture.startsWith('http')) {
+      return user.profile_picture;
+    } else {
+      // If it's just a path, add the Cloudinary domain
+      return `http://res.cloudinary.com/dlp4jsibt/${user.profile_picture}`;
     }
-    
-    return user.profile_picture;
   };
 
   const profilePictureUrl = getProfilePicture();
