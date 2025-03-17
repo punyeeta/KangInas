@@ -246,11 +246,10 @@ const useAuthStore = create<AuthState>((set, get) => ({
       const formData = new FormData();
       formData.append('profile_picture', file);
   
-      console.log('Uploading profile picture...');
+      console.log('Uploading profile picture...', file.name, file.type, file.size);
       
-      const response = await api.put('/profile/picture/', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      // Remove the Content-Type header - let the browser set it automatically with the boundary
+      const response = await api.put('/profile/picture/', formData);
   
       console.log('Profile picture upload complete response:', response);
       console.log('Response data:', response.data);
@@ -272,15 +271,28 @@ const useAuthStore = create<AuthState>((set, get) => ({
         set({ error: "Failed to get profile picture URL", isLoading: false });
         return undefined;
       }
-    } catch (error: any) { // Add type annotation here
+    } catch (error: any) {
       console.error('Error updating profile picture:', error);
-      // Safely access error.response if it exists
+      
+      // More detailed error logging
       if (error.response) {
-        console.error('Error response:', error.response.data);
+        console.error('Error status:', error.response.status);
+        console.error('Error response data:', error.response.data);
+        console.error('Error response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('Error request:', error.request);
+      } else {
+        console.error('Error message:', error.message);
       }
-      // Safely create an error message
-      const errorMessage = error.response?.data?.error || 
-                           (error instanceof Error ? error.message : 'Failed to update profile picture');
+      
+      // Provide a more specific error message if possible
+      let errorMessage = 'Failed to update profile picture';
+      if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       set({ error: errorMessage, isLoading: false });
       return undefined;
     }

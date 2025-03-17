@@ -98,10 +98,10 @@ class ProfilePictureUpdateView(APIView):
             user.profile_picture = request.FILES['profile_picture']
             user.save()
 
-            # Return the URL of the uploaded image
+            # Return the URL of the uploaded image - Add explicit URL retrieval
             return Response({
                 "message": "Profile picture updated successfully",
-                "profile_picture": user.profile_picture.url  # Ensure this returns the full URL
+                "profile_picture": user.profile_picture.url if user.profile_picture else None
             }, status=status.HTTP_200_OK)
 
         except Exception as e:
