@@ -12,11 +12,5 @@
       "src": "/api/(.*)",
       "dest": "backend/wsgi.py"
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
   ]
 }
