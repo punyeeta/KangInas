@@ -23,8 +23,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     addItem(product.id);
   };
   
-  const handleToggleFavorite = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering parent click events
+  const handleToggleFavorite = (e?: React.MouseEvent) => {
+    e?.stopPropagation(); // Prevent triggering parent click events if event exists
     toggleFavorite(product.id);
   };
   
@@ -114,7 +114,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <ProductDetailModal 
           product={product}
           onClose={() => setShowDetails(false)}
-          onToggleFavorite={handleToggleFavorite}
+          onToggleFavorite={() => handleToggleFavorite()}
         />
       )}
     </>
