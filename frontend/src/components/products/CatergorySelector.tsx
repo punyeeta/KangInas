@@ -34,7 +34,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
     return (
       <div className="mb-6 flex justify-center gap-2">
         {[1, 2, 3, 4].map(i => (
-          <div key={i} className="h-40 w-40 rounded-lg bg-gray-200 animate-pulse"></div>
+          <div key={i} className="h-24 w-20 md:h-40 md:w-40 rounded-lg bg-gray-200 animate-pulse"></div>
         ))}
       </div>
     );
@@ -46,7 +46,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
 
   return (
     <div className="mb-6">
-      <div className="flex justify-center gap-3 overflow-x-auto py-2">
+      <div className="flex justify-start md:justify-center gap-3 overflow-x-auto py-2 px-4 md:px-0">
         {categories.map((category) => {
           const style = categoryStyles[category.value.toUpperCase()] || {
             image: '/images/default.jpg',
@@ -63,23 +63,29 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
 
           return (
             <button
-            key={category.value}
-            onClick={() => onCategorySelect(category.value)}
-            className={`flex flex-col items-start p-4 w-32 h-32 rounded-lg shadow-lg border border-gray-200 transition-all 
-              ${style.bgColor} ${style.textColor}
-              ${selectedCategory === category.value ? 'ring-1 ring-black' : ''}`}
-          >
-            <img
-              src={style.image}
-              alt={category.label}
-              className="w-13 h-13 object-contain mb-2"
-            />
-            <div className="w-full text-left">
-              <div className="text-sm font-medium">{category.label}</div>
-              <div className="text-xs text-gray-500">{subtitle}</div>
-            </div>
-          </button>
-          
+              key={category.value}
+              onClick={() => onCategorySelect(category.value)}
+              className={`flex flex-col flex-shrink-0
+                ${selectedCategory === category.value ? 'ring-2 md:ring-1 ring-black' : ''}
+                md:items-start md:p-4 md:w-32 md:h-32 md:rounded-lg md:shadow-lg md:border md:border-gray-200 md:transition-all
+                items-center p-2 w-20 h-24 rounded-lg shadow-lg border border-gray-200 transition-all
+                ${style.bgColor} ${style.textColor}`}
+            >
+              <img
+                src={style.image}
+                alt={category.label}
+                className="w-10 h-10 md:w-13 md:h-13 object-contain mb-2"
+              />
+              {/* Mobile view - just category name */}
+              <div className="block md:hidden text-center w-full">
+                <div className="text-xs font-medium truncate">{category.label}</div>
+              </div>
+              {/* Desktop view - original layout */}
+              <div className="hidden md:block w-full text-left">
+                <div className="text-sm font-medium">{category.label}</div>
+                <div className="text-xs text-gray-500">{subtitle}</div>
+              </div>
+            </button>
           );
         })}
       </div>

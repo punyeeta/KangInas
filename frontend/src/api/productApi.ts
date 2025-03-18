@@ -1,4 +1,3 @@
-// First, let's update your productApi.ts to add search functionality
 // src/api/productApi.ts
 import api from './api';
 
