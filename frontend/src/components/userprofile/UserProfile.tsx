@@ -145,28 +145,28 @@ const UserProfilePage = () => {
           <div className="p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
             <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center text-3xl text-gray-500 overflow-hidden">
             {profilePictureUrl ? (
-  <>
-    <img 
-      src={profilePictureUrl} 
-      alt={user?.username?.charAt(0).toUpperCase() || ''} 
-      className="h-full w-full object-cover rounded-full" 
-      onLoad={() => console.log('Image loaded successfully:', profilePictureUrl)}
-      onError={(e) => {
-        console.error("Profile image failed to load:", profilePictureUrl);
-        e.currentTarget.style.display = 'none';
-      }}
-    />
-    {/* Fallback for debugging */}
-    <div className="hidden">{profilePictureUrl}</div>
-  </>
-) : (
-  user?.full_name ? 
-    user.full_name.charAt(0).toUpperCase() : 
-    (user?.username?.charAt(0).toUpperCase() || '?')
-)}
+              <>
+                <img 
+                  src={profilePictureUrl} 
+                  alt={user?.username?.charAt(0).toUpperCase() || ''} 
+                  className="h-full w-full object-cover rounded-full" 
+                  onLoad={() => console.log('Image loaded successfully:', profilePictureUrl)}
+                  onError={(e) => {
+                    console.error("Profile image failed to load:", profilePictureUrl);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+                {/* Fallback for debugging */}
+                <div className="hidden">{profilePictureUrl}</div>
+              </>
+            ) : (
+              user?.full_name ? 
+                user.full_name.charAt(0).toUpperCase() : 
+                (user?.username?.charAt(0).toUpperCase() || '?')
+            )}
             </div>
             <div className="text-center md:text-left w-full">
-              <h2 className="text-2xl font-bold text-indigo-900">{user?.full_name || user?.username || 'No name set'}</h2>
+              <h2 className="text-4xl font-bold text-[#32347C]">{user?.full_name || user?.username || 'No name set'}</h2>
               <div className="mt-2 text-gray-600">
                 <p>Email address: {user?.email || 'No email set'}</p>
                 <p>Phone number: {user?.phone_number || 'No phone number set'}</p>
@@ -192,7 +192,7 @@ const UserProfilePage = () => {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             {/* Favorites */}
-            <h2 className="text-xl font-bold mb-4">Your favorite meals:</h2>
+            <h2 className="text-xl font-bold mb-4 text-[#ED3F25]">Your favorite meals:</h2>
             {favoritesLoading ? (
               <div className="text-center text-gray-500">Loading favorites...</div>
             ) : favorites.length === 0 ? (
@@ -224,11 +224,11 @@ const UserProfilePage = () => {
           </div>
           {/* Recent Purchase */}
           <div>
-            <h2 className="text-xl font-bold mb-4">Recently purchased:</h2>
+            <h2 className="text-xl font-bold mb-4 text-[#ED3F25]">Recently purchased:</h2>
             {ordersLoading ? (
               <div className="text-center text-gray-500">Loading orders...</div>
             ) : orders.length === 0 ? (
-              <div className="text-center text-gray-500">No recent orders yet. Start shopping!</div>
+              <div className="text-center text-gray-500">No recent orders yet. Palit na bai!</div>
             ) : (
               <div className="grid grid-cols-1 gap-2 max-h-75 overflow-y-auto pr-2">
                 {orders.map((order) => (

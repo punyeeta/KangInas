@@ -14,14 +14,16 @@ interface CategorySelectorProps {
   isError: boolean;
 }
 
-// Category-to-image and style mapping
-const categoryStyles: Record<string, { image: string; bgColor: string; textColor: string }> = {
-  ALL: { image: image1, bgColor: 'bg-white', textColor: 'text-black' },
-  AGAHAN: { image: image2, bgColor: 'bg-white', textColor: 'text-black' },
-  TANGHALIAN: { image: image3, bgColor: 'bg-white', textColor: 'text-black' },
-  HAPUNAN: { image: image4, bgColor: 'bg-white', textColor: 'text-black' },
-  MERIENDA: { image: image5, bgColor: 'bg-white', textColor: 'text-black' }
+const categoryStyles: Record<string, { image: string; bgColor: string; textColor: string; borderColor: string }> = {
+  ALL: { image: image1, bgColor: 'bg-white', textColor: 'text-black', borderColor: 'border-indigo-700' },
+  AGAHAN: { image: image2, bgColor: 'bg-white', textColor: 'text-black', borderColor: 'border-red-500' },
+  TANGHALIAN: { image: image3, bgColor: 'bg-white', textColor: 'text-black', borderColor: 'border-yellow-500' },
+  HAPUNAN: { image: image4, bgColor: 'bg-white', textColor: 'text-black', borderColor: 'border-indigo-700' },
+  MERIENDA: { image: image5, bgColor: 'bg-white', textColor: 'text-black', borderColor: 'border-red-500' }
 };
+
+// Define the custom order for categories
+const categoryOrder = ['ALL', 'AGAHAN', 'TANGHALIAN', 'HAPUNAN', 'MERIENDA'];
 
 export const CategorySelector: React.FC<CategorySelectorProps> = ({
   categories,
@@ -44,14 +46,28 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
     return <div className="mb-6 text-red-500">Failed to load categories</div>;
   }
 
+  // Sort categories based on the custom order
+  const sortedCategories = [...categories].sort((a, b) => {
+    const aIndex = categoryOrder.indexOf(a.value.toUpperCase());
+    const bIndex = categoryOrder.indexOf(b.value.toUpperCase());
+    
+    // Handle any categories not in the order array
+    if (aIndex === -1 && bIndex === -1) return 0;
+    if (aIndex === -1) return 1;
+    if (bIndex === -1) return -1;
+    
+    return aIndex - bIndex;
+  });
+
   return (
     <div className="mb-6">
       <div className="flex justify-center gap-3 overflow-x-auto py-2">
-        {categories.map((category) => {
+        {sortedCategories.map((category) => {
           const style = categoryStyles[category.value.toUpperCase()] || {
             image: '/images/default.jpg',
             bgColor: 'bg-white',
-            textColor: 'text-black'
+            textColor: 'text-black',
+            borderColor: 'border-gray-200'
           };
 
           const subtitle = 
@@ -63,23 +79,24 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
 
           return (
             <button
-            key={category.value}
-            onClick={() => onCategorySelect(category.value)}
-            className={`flex flex-col items-start p-4 w-32 h-32 rounded-lg shadow-lg border border-gray-200 transition-all 
-              ${style.bgColor} ${style.textColor}
-              ${selectedCategory === category.value ? 'ring-1 ring-black' : ''}`}
-          >
-            <img
-              src={style.image}
-              alt={category.label}
-              className="w-13 h-13 object-contain mb-2"
-            />
-            <div className="w-full text-left">
-              <div className="text-sm font-medium">{category.label}</div>
-              <div className="text-xs text-gray-500">{subtitle}</div>
-            </div>
-          </button>
-          
+              key={category.value}
+              onClick={() => onCategorySelect(category.value)}
+              className={`flex flex-col items-start p-4 w-32 h-32 rounded-lg shadow-lg transition-all 
+                ${style.bgColor} ${style.textColor}
+                ${selectedCategory === category.value 
+                  ? `border ${style.borderColor}` 
+                  : 'border border-gray-200'}`}
+            >
+              <img
+                src={style.image}
+                alt={category.label}
+                className="w-13 h-13 object-contain mb-2"
+              />
+              <div className="w-full text-left">
+                <div className="text-sm font-medium">{category.label}</div>
+                <div className="text-xs text-gray-500">{subtitle}</div>
+              </div>
+            </button>
           );
         })}
       </div>
