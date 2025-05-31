@@ -51,8 +51,8 @@ npm run dev
 
 ## Sample Screenshot
 
-### Menu Page
-![Menu Page](https://github.com/user-attachments/assets/de729658-48e6-4633-b638-33c207304195)
+### Home Page
+![Home Page](https://github.com/user-attachments/assets/de729658-48e6-4633-b638-33c207304195)
 
 ---
 
