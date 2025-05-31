@@ -56,7 +56,7 @@ npm run dev
 
 ---
 
-## Contributors
+## Developers
 | Avatar | Name | GitHub |
 |--------|------|--------|
 | <img src="https://avatars.githubusercontent.com/u/150583091?v=4" width="60"/> | Mark Vincent Limpahan (UI/UX Designer) | [@markvncent](https://github.com/markvncent) |
